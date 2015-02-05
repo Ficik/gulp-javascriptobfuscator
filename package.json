@@ -1,6 +1,6 @@
 {
   "name": "gulp-javascriptobfuscator",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Obfuscate JavasScript via javascriptobfuscator.com. Please DO NOT include any sensitive data.",
   "email": "tangkhaiphuong@gmail.com",
   "main": "index.js",
