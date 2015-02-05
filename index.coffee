@@ -31,7 +31,7 @@ obfuscate = (source, options, cb) ->
 	req = http.get
 		hostname: site,
 		port: 80,
-		path: "/"
+		path: "/Javascript-Obfuscator.aspx"
 	, (res) ->
 		res.setEncoding "utf8"
 		data = ""
@@ -39,23 +39,27 @@ obfuscate = (source, options, cb) ->
 			data += chunk
 		res.on "end", ->
 			viewState = ///id=\"__VIEWSTATE\".+value=\"(.+)\"///.exec(data)[1]
+			viewStateGenerator = ///id=\"__VIEWSTATEGENERATOR\".+value=\"(.+)\"///.exec(data)[1]
 			eventValidation = ///id=\"__EVENTVALIDATION\".+value=\"(.+)\"///.exec(data)[1]
 			qr = require "querystring"
 			.stringify
+				UploadLib_Uploader_js:1,
+				"ctl00$breadcrumbs$uploader1":"",
 				__VIEWSTATE: viewState,
+				__VIEWSTATEGENERATOR: viewStateGenerator,
+				__EVENTTARGET:"ctl00$breadcrumbs$Button1",
+				__EVENTARGUMENT:"",
 				__EVENTVALIDATION: eventValidation,
-				TextBox1: source,
-				TextBox2: ""
-				Button1: "Obfuscate"
-				cbEncodeStr: options.encodeString,
-				cbEncodeNumber: options.encodeNumber,
-				cbMoveStr: options.replaceNames,
-				cbReplaceNames: options.moveString
+				"ctl00$breadcrumbs$TextBox1": source,
+				"ctl00$MainContent$cbEncodeStr": options.encodeString,
+				"ctl00$MainContent$cbEncodeNumber": options.encodeNumber,
+				"ctl00$MainContent$cbMoveStr": options.replaceNames,
+				"ctl00$MainContent$cbReplaceNames": options.moveString,
 				TextBox3: options.exclusions.join "\r\n"
 			req2 = http.request
 				hostname: site,
 				port: 80,
-				path: "/",
+				path: "/Javascript-Obfuscator.aspx",
 				method: "POST"
 				headers:
 					'Content-Type': 'application/x-www-form-urlencoded'
